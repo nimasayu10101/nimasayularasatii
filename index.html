@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badan Layanan Umum Daerah</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Georgia", "Times New Roman", serif;
+            background-color: #f4f4f4;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            height: 100vh;
+            --s: 100px;
+            --c1: #f8b195;
+            --c2: #355c7d;
+            --_g: var(--c2) 4% 14%, var(--c1) 14% 24%, var(--c2) 22% 34%, var(--c1) 34% 44%, var(--c2) 44% 56%, var(--c1) 56% 66%, var(--c2) 66% 76%, var(--c1) 76% 86%, var(--c2) 86% 96%;
+            background: radial-gradient(100% 100% at 100% 0, var(--c1) 4%, var(--_g), #0008 96%, #0000),
+                        radial-gradient(100% 100% at 0 100%, #0000, #0008 4%, var(--_g), var(--c1) 96%) var(--c1);
+            background-size: var(--s) var(--s);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Header */
+        .header {
+            background-color: #081749;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header h1 {
+            margin: 0;
+            padding-left: 15px;
+        }
+
+        .menu-icon {
+            font-size: 30px;
+            cursor: pointer;
+            position: absolute;
+            left: 10px;
+            top: 15px;
+        }
+
+        .logo {
+            height: 50px;
+        }
+
+        /* Side Menu */
+        .side-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #081749;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            z-index: 1000; /* Ensure it is above other content */
+        }
+
+        .side-menu a {
+            padding: 8px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .side-menu a:hover {
+            background-color: #c6c4db;
+        }
+
+        .side-menu .close-btn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 0;
+            padding: 20px;
+            transition: margin-left 0.5s;
+            height: 100%;
+            flex-grow: 1;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #081749;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container -->
+    <div class="container">
+        
+        <!-- Side Menu -->
+        <div id="side-menu" class="side-menu">
+            <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
+            <a href="#" data-target="beranda.html">Beranda</a>
+            <a href="#" data-target="tentang.html">Tentang Kami</a>
+            <a href="#" data-target="layanan.html">Layanan</a>
+            <a href="#" data-target="kontak.html">Kontak</a>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <span class="menu-icon" onclick="toggleMenu()">&#9776;</span>
+            <img src="c:\Users\Ayu\Downloads\LOGO-PEMKO-untuk-berita-removebg-preview.png" alt="Logo BLUD" class="logo">
+            <h1>Badan Layanan Umum Daerah</h1>
+        </div>
+
+        <!-- Main Content with iframe -->
+        <div id="main-content" class="main-content">
+            <iframe id="content-frame" name="content-frame" src="beranda.html"></iframe>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 Badan Layanan Umum Daerah. All Rights Reserved.</p>
+        </div>
+        
+    </div>
+
+    <!-- JavaScript -->
+<script>
+    // Variabel global untuk menyimpan halaman yang ditampilkan
+    let currentPage = 'beranda.html';
+
+    // Fungsi untuk membuka atau menutup side menu
+    function toggleMenu() {
+        const sideMenu = document.getElementById("side-menu");
+        const mainContent = document.getElementById("main-content");
+        if (sideMenu.style.width === "250px") {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    }
+
+    function openMenu() {
+        document.getElementById("side-menu").style.width = "250px";
+        document.getElementById("main-content").style.marginLeft = "250px";
+        document.addEventListener('click', outsideClickListener);
+    }
+
+    function closeMenu() {
+        document.getElementById("side-menu").style.width = "0";
+        document.getElementById("main-content").style.marginLeft = "0";
+        document.removeEventListener('click', outsideClickListener);
+    }
+
+    // Menutup menu jika klik di luar menu
+    function outsideClickListener(event) {
+        const sideMenu = document.getElementById("side-menu");
+        if (!sideMenu.contains(event.target) && !document.querySelector('.menu-icon').contains(event.target)) {
+            closeMenu();
+        }
+    }
+
+    // Fungsi untuk mengganti konten iframe sesuai menu yang diklik
+    document.querySelectorAll('.side-menu a').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const targetPage = this.getAttribute('data-target');
+            if (targetPage) {
+                currentPage = targetPage; // Simpan halaman yang diklik
+                document.getElementById('content-frame').src = targetPage;
+                closeMenu(); // Menutup side menu setelah mengklik
+            }
+        });
+    });
+
+    // Set iframe untuk memuat halaman terakhir ketika menu dibuka
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('content-frame').src = currentPage;
+    });
+</script>
+
+
+</body>
+</html>
